@@ -1,0 +1,35 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EmoSense · Modo reto</title>
+<script src="{% static 'attendance/theme.js' %}?v=10"></script>
+<link rel="stylesheet" href="{% static 'attendance/app.css' %}?v=10">
+<link rel="stylesheet" href="{% static 'attendance/brand.css' %}?v=11">
+<link rel="stylesheet" href="{% static 'attendance/challenge.css' %}?v=1">
+<script src="{% static 'attendance/brand.js' %}?v=11" defer></script>
+<script src="{% static 'attendance/challenge.js' %}?v=2" defer></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="{% url 'home' %}" aria-label="EmoSense, inicio">{% include 'attendance/includes/logo.html' %}Emo<span>Sense</span></a><nav aria-label="Navegación principal"><a class="nav-action" href="{% url 'home' %}">← Volver al inicio</a><button id="theme-toggle" class="theme-toggle" type="button" aria-label="Activar modo oscuro" aria-pressed="false"><span id="theme-icon" aria-hidden="true">&#9790;</span><span class="theme-label" id="theme-label">Modo oscuro</span></button></nav></header>
+<main class="challenge-page">
+<p class="eyebrow">JUEGA CON TUS GESTOS</p><h1>Una cara, siete retos.</h1>
+<p class="challenge-intro">Imita la expresión, descubre su GIF y aprende algo nuevo. Sin prisa: puedes omitir cualquier reto.</p>
+<div class="challenge-progress"><span id="round-label">Reto 1 de 7</span><progress id="round-progress" max="7" value="0" aria-label="Retos recorridos"></progress></div>
+<div class="challenge-layout">
+<section class="card challenge-camera" aria-labelledby="camera-heading"><h2 id="camera-heading">Tu escenario</h2>
+<div class="challenge-camera-frame"><video id="challenge-video" autoplay muted playsinline hidden></video><div id="challenge-placeholder"><span aria-hidden="true">☺</span><p>Tu próximo gesto empieza aquí.</p></div></div>
+<button class="button button-primary" id="challenge-camera-toggle" type="button">Iniciar cámara</button>
+<p id="challenge-status" role="status" aria-live="polite">Activa la cámara cuando estés listo.</p><form hidden>{% csrf_token %}</form>
+</section>
+<section class="card challenge-mission" aria-labelledby="mission-title">
+<div id="mission"><span id="mission-emoji" aria-hidden="true">😐</span><p class="eyebrow">TU MISIÓN</p><h2 id="mission-title">Relaja tu rostro</h2><p id="mission-hint"></p><p id="match-status" role="status" aria-live="polite">Buscamos dos detecciones seguidas de la expresión.</p><button id="skip-round" class="button button-secondary" type="button">Omitir este reto</button></div>
+<div id="celebration" hidden><p class="eyebrow">¡LO LOGRASTE!</p><h2 id="success-title"></h2><img id="challenge-gif" alt=""><span id="gif-fallback" hidden aria-hidden="true"></span><p id="gif-error" hidden>No se pudo cargar el GIF, pero tu reto está completado.</p><div class="challenge-curiosity"><h3>¿Sabías que…?</h3><p id="curiosity"></p></div><button id="next-round" class="button button-primary" type="button">Siguiente reto →</button></div>
+<div id="challenge-summary" hidden><span class="summary-star" aria-hidden="true">✨</span><h2>¡Terminaste el recorrido!</h2><p id="summary-count"></p><ul id="summary-list"></ul><button id="restart-challenge" class="button button-primary" type="button">Volver a jugar</button><a class="challenge-home" href="{% url 'home' %}">Volver al inicio</a></div>
+</section></div>
+<p class="challenge-note">Practicamos gestos, no medimos lo que sientes. El modelo puede confundirse: omitir también está bien. Las imágenes se procesan en memoria y no se guardan.</p>
+<div id="challenge-confetti" aria-hidden="true"></div>
+<div id="challenge-gif-sources" hidden data-neutral="{% static 'attendance/reactions/neutral.gif' %}" data-alegria="{% static 'attendance/reactions/alegria.gif' %}" data-sorpresa="{% static 'attendance/reactions/sorpresa.gif' %}" data-tristeza="{% static 'attendance/reactions/tristeza.gif' %}" data-disgusto="{% static 'attendance/reactions/disgusto.gif' %}" data-miedo="{% static 'attendance/reactions/miedo.gif' %}" data-enojo="{% static 'attendance/reactions/enojo.gif' %}"></div>
+</main>
+</body></html>

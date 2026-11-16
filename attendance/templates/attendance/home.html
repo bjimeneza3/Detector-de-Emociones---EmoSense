@@ -1,0 +1,35 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f7fc"><meta name="description" content="Explora siete expresiones faciales con EmoSense, tu espacio de visión artificial.">
+<title>EmoSense · Detección de emociones</title>
+<script src="{% static 'attendance/theme.js' %}?v=8"></script>
+<link rel="stylesheet" href="{% static 'attendance/app.css' %}?v=15">
+
+<script>
+document.documentElement.classList.add('page-loading');
+window.setTimeout(function () { document.documentElement.classList.remove('page-loading'); }, 8000);
+</script>
+<link rel="stylesheet" href="{% static 'attendance/brand.css' %}?v=11">
+<script src="{% static 'attendance/brand.js' %}?v=11" defer></script>
+</head>
+<body class="welcome-page">
+{% include 'attendance/includes/loader.html' %}
+<header class="topbar"><a class="brand" href="#" aria-label="EmoSense, inicio">{% include 'attendance/includes/logo.html' %}Emo<span>Sense</span></a><nav aria-label="Navegación principal"><a href="#explorar">Explorar</a><a href="#como-funciona">Cómo funciona</a><a href="{% url 'detector' %}" class="nav-action">Probar ahora <span aria-hidden="true">↗</span></a><button id="theme-toggle" class="theme-toggle" type="button" aria-label="Activar modo oscuro" aria-pressed="false"><span id="theme-icon" aria-hidden="true">&#9790;</span><span class="theme-label" id="theme-label">Modo oscuro</span></button></nav></header>
+<main>
+<section class="hero" id="explorar">
+<div class="hero-copy"><span class="pill"><span class="small-dot"></span> UN ESPACIO PARA CADA EXPRESIÓN</span>
+<h1>Tu rostro tiene<br>mucho que <em>contar.</em></h1>
+<p>Una sonrisa, una sorpresa, un instante. Explora el mundo de las expresiones con un poquito de inteligencia artificial.</p>
+<div class="hero-actions"><a class="button button-primary" id="start-experience" href="{% url 'detector' %}">Comenzar experiencia <span aria-hidden="true">↗</span></a><a class="button button-primary" href="{% url 'challenge' %}">Probar el Modo reto <span aria-hidden="true">↗</span></a></div>
+<a class="text-link hero-how-link" href="#como-funciona">¿Cómo funciona? <span aria-hidden="true">↓</span></a>
+<div class="hero-meta"><span><i>✓</i> Sin registros</span><span><i>✓</i> Imágenes sin guardar</span><span><i>✓</i> A tu ritmo</span></div></div>
+<div class="hero-art"><span class="orbit-emoji orbit-one" aria-hidden="true">😊</span><span class="orbit-emoji orbit-two" aria-hidden="true">😲</span><span class="orbit-emoji orbit-three" aria-hidden="true">💜</span><div class="art-glow"></div><img src="{% static 'attendance/welcome.svg' %}?v=8" alt="Ilustración de tres rostros amigables con expresiones de alegría, sorpresa y calma" width="560" height="440"><span class="floating-note note-top"><span>✨</span> Cada expresión es única</span><span class="floating-note note-bottom"><span class="small-dot"></span> Un pequeño gesto, mil matices</span></div>
+</section>
+<section class="emotion-ribbon" aria-label="Siete expresiones que puedes explorar"><span>UN UNIVERSO DE GESTOS</span><div><span>😊 Alegría</span><span>😲 Sorpresa</span><span>😐 Neutral</span><span>😢 Tristeza</span><span>😠 Enojo</span><span>😨 Miedo</span><span>🤢 Disgusto</span></div></section>
+<section id="como-funciona" class="how-section"><p class="eyebrow">TAN SIMPLE COMO SONREÍR</p><h2>Cómo funciona</h2><p class="how-intro">Tres pasos para explorar un mundo de expresiones.</p><div class="steps"><article><span class="step-number">01</span><span class="step-icon">📷</span><h3>Elige tu momento</h3><p>Enciende la cámara o selecciona una fotografía desde tu dispositivo.</p></article><article><span class="step-number">02</span><span class="step-icon">✨</span><h3>Deja que tu rostro hable</h3><p>Mira de frente, busca buena iluminación y explora distintos gestos.</p></article><article><span class="step-number">03</span><span class="step-icon">😊</span><h3>Descubre el resultado</h3><p>Observa el emoji y las puntuaciones de las siete expresiones.</p></article></div><a class="button button-primary how-cta" href="{% url 'detector' %}">Comenzar experiencia <span aria-hidden="true">↗</span></a></section>
+</main>
+<footer><a class="brand" href="#">{% include 'attendance/includes/logo.html' %}Emo<span>Sense</span></a><p>Hecho para explorar, con curiosidad y una sonrisa.</p><span>Visión artificial · 7 expresiones</span></footer>
+</body></html>

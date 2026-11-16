@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EmoSense · Propuesta de logo animado</title>
+<style>
+:root{color-scheme:light dark;--bg:#f9f8fc;--ink:#28263d;--purple:#7760d9;--panel:#fff;--line:#e5dff5}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px 'Segoe UI',sans-serif;min-height:100vh;display:grid;place-items:center;padding:24px}main{width:min(840px,100%);text-align:center}.eyebrow{letter-spacing:.18em;font-size:12px;color:var(--purple);text-transform:uppercase}.stage{padding:60px 25px;background:var(--panel);border:1px solid var(--line);border-radius:28px;margin:24px 0}.logo{display:flex;align-items:center;justify-content:center;gap:22px}.portrait{width:clamp(94px,22vw,175px);flex-shrink:0;color:var(--purple);overflow:visible}.wordmark{font-size:clamp(32px,7.5vw,70px);font-weight:800;letter-spacing:-.055em;white-space:nowrap}.wordmark span{color:var(--purple)}.status{margin:30px 0 0;color:var(--purple);min-height:24px}.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}button{font:inherit;color:var(--ink);border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:10px 16px;cursor:pointer}button[aria-pressed=true]{background:var(--purple);color:#fff;border-color:var(--purple)}button:focus-visible{outline:3px solid #ac94ef;outline-offset:3px}.play{margin-top:20px}.note{font-size:13px;opacity:.65;margin-top:28px}@media(prefers-color-scheme:dark){:root{--bg:#191724;--ink:#f2effb;--purple:#b29aef;--panel:#242131;--line:#3c354f}}@media(max-width:420px){body{padding:16px}.stage{padding:42px 12px}.logo{gap:12px}}
+</style>
+<main>
+<p class="eyebrow">Una identidad con emociones</p>
+<div class="stage">
+<div class="logo" role="img" aria-label="EmoSense: niño animado que cambia de expresión dentro de un marco de detección">
+<svg class="portrait" viewBox="0 0 200 200" aria-hidden="true">
+<g fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+<path d="M43 13H26Q13 13 13 26V43M157 13H174Q187 13 187 26V43M13 157V174Q13 187 26 187H43M157 187H174Q187 187 187 174V157" opacity=".7"/>
+<g id="head">
+<path d="M42 97C25 89 27 123 43 125C49 157 71 173 100 173C129 173 151 157 157 125C173 123 175 89 158 97" fill="var(--panel)"/>
+<path d="M40 99C31 47 65 29 101 29C137 29 168 55 160 99L143 87L132 65Q118 87 96 88L96 72Q74 93 40 99Z" fill="currentColor" stroke-width="4"/>
+<g id="features" stroke-width="6">
+<path id="browL" d="M64 94 Q74 89 84 94"/>
+<path id="browR" d="M116 94 Q126 89 136 94"/>
+<path id="eyeL" d="M65 112 Q74 97 83 112"/>
+<path id="eyeR" d="M117 112 Q126 97 135 112"/>
+<path id="mouth" d="M80 133 Q100 157 120 133 Q100 166 80 133Z" fill="currentColor" stroke-width="4"/>
+</g></g></g>
+</svg>
+<div class="wordmark">Emo<span>Sense</span></div>
+</div>
+<p class="status" id="status">Alegría</p>
+</div>
+<div class="controls" id="emotions" aria-label="Elegir expresión"></div>
+<button class="play" id="play" type="button">Pausar animación</button>
+<p class="note">Propuesta animada · Pendiente de tu visto bueno</p>
+</main>
+<script>
+(()=>{
+const states=[
+['Alegría',[64,94,74,89,84,94],[116,94,126,89,136,94],[65,112,74,97,83,112],[117,112,126,97,135,112],[80,133,100,157,120,133,100,166,80,133]],
+['Sorpresa',[64,88,74,81,84,88],[116,88,126,81,136,88],[69,109,74,98,79,109],[121,109,126,98,131,109],[90,139,100,119,110,139,100,161,90,139]],
+['Tristeza',[64,96,74,96,84,88],[116,88,126,96,136,96],[65,113,74,118,83,111],[117,111,126,118,135,113],[84,144,100,128,116,144,100,135,84,144]],
+['Enojo',[64,89,74,95,84,99],[116,99,126,95,136,89],[65,111,74,115,83,111],[117,111,126,115,135,111],[84,145,100,130,116,145,100,136,84,145]],
+['Miedo',[64,92,74,84,84,85],[116,85,126,84,136,92],[67,111,74,98,81,111],[119,111,126,98,133,111],[85,143,100,126,115,143,100,153,85,143]],
+['Disgusto',[64,96,74,86,84,94],[116,93,126,98,136,97],[65,112,74,108,83,112],[117,111,126,116,135,111],[83,143,100,135,117,139,100,147,83,143]],
+['Neutral',[64,93,74,91,84,93],[116,93,126,91,136,93],[69,110,74,103,79,110],[121,110,126,103,131,110],[84,140,100,140,116,140,100,140,84,140]]
+];
+const keys=['browL','browR','eyeL','eyeR','mouth'];const nodes=keys.map(k=>document.getElementById(k));const group=document.getElementById('emotions');const play=document.getElementById('play');const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let index=0,playing=!reduced,current=states[0].slice(1).map(a=>a.slice()),raf=0;
+function path(a,mouth){return mouth?`M${a[0]} ${a[1]} Q${a[2]} ${a[3]} ${a[4]} ${a[5]} Q${a[6]} ${a[7]} ${a[8]} ${a[9]}Z`:`M${a[0]} ${a[1]} Q${a[2]} ${a[3]} ${a[4]} ${a[5]}`}
+function show(i){index=i;cancelAnimationFrame(raf);const from=current.map(a=>a.slice()),to=states[i].slice(1),start=performance.now();document.getElementById('status').textContent=states[i][0];[...group.children].forEach((b,j)=>b.setAttribute('aria-pressed',j===i));function frame(now){let t=reduced?1:Math.min(1,(now-start)/460);t=t*t*(3-2*t);current=from.map((a,j)=>a.map((v,k)=>v+(to[j][k]-v)*t));nodes.forEach((n,j)=>n.setAttribute('d',path(current[j],j===4)));if(t<1)raf=requestAnimationFrame(frame)}raf=requestAnimationFrame(frame)}
+states.forEach((s,i)=>{const b=document.createElement('button');b.type='button';b.textContent=s[0];b.addEventListener('click',()=>{playing=false;updatePlay();show(i)});group.appendChild(b)});
+function updatePlay(){play.textContent=playing?'Pausar animación':'Reproducir animación'}
+play.addEventListener('click',()=>{playing=!playing;updatePlay()});setInterval(()=>{if(playing&&!document.hidden)show((index+1)%states.length)},2200);updatePlay();show(0);
+})();
+</script>
+</html>

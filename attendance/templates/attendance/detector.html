@@ -1,0 +1,69 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f7fc"><meta name="description" content="Explora siete expresiones faciales con EmoSense, tu espacio de visión artificial.">
+<title>EmoSense · Detección de emociones</title>
+<script src="{% static 'attendance/theme.js' %}?v=10"></script>
+<link rel="stylesheet" href="{% static 'attendance/app.css' %}?v=10">
+<link rel="stylesheet" href="{% static 'attendance/expression-guide.css' %}?v=1">
+
+<script src="{% static 'attendance/app.js' %}?v=14" defer></script>
+<script>
+document.documentElement.classList.add('page-loading');
+window.setTimeout(function () { document.documentElement.classList.remove('page-loading'); }, 8000);
+</script>
+<link rel="stylesheet" href="{% static 'attendance/brand.css' %}?v=11">
+<script src="{% static 'attendance/brand.js' %}?v=11" defer></script>
+</head>
+<body class="detector-page">
+{% include 'attendance/includes/loader.html' %}
+<header class="topbar"><a class="brand" href="{% url 'home' %}" aria-label="EmoSense, inicio">{% include 'attendance/includes/logo.html' %}Emo<span>Sense</span></a><nav aria-label="Navegación principal"><a href="{% url 'home' %}#como-funciona">Cómo funciona</a><a class="nav-action" href="{% url 'home' %}">← Volver al inicio</a><button id="theme-toggle" class="theme-toggle" type="button" aria-label="Activar modo oscuro" aria-pressed="false"><span id="theme-icon" aria-hidden="true">&#9790;</span><span class="theme-label" id="theme-label">Modo oscuro</span></button></nav></header>
+<main><div class="detector-intro"><a class="back-link" href="{% url 'home' %}">← Volver a la bienvenida</a><span class="pill">TU ESPACIO DE EXPLORACIÓN</span></div>
+<section id="detector" class="workspace">
+<div class="workspace-heading"><div><p class="eyebrow">DESCUBRE TU EXPRESIÓN</p><h1>Tu momento, en tiempo real.</h1></div><span class="local-chip"><span class="small-dot"></span> Procesamiento local</span></div>
+<div class="layout">
+<section class="card camera-card" aria-labelledby="camera-title">
+<div class="section-heading"><div class="camera-heading"><span class="mini-icon">◎</span><h3 id="camera-title">Estudio de expresiones</h3></div><span id="mode" class="mode-chip">En espera</span></div>
+<div class="camera-frame">
+<video id="camera" autoplay muted playsinline hidden></video><img id="photo" alt="Fotografía seleccionada para analizar" hidden><canvas id="overlay" aria-hidden="true"></canvas>
+<div id="camera-placeholder" class="camera-placeholder"><div class="viewfinder"><span>☺</span><i></i></div><h3>Un gesto para comenzar</h3><p>Activa tu cámara o sube una foto.<br>El siguiente descubrimiento está en tu rostro.</p><span class="placeholder-badge">Tu cámara se activa solo cuando tú quieras</span></div>
+</div>
+<p id="quality-hint" class="quality-hint" role="status" hidden></p>
+<div class="camera-actions"><button id="camera-toggle" class="button button-primary" type="button">Iniciar cámara</button><button id="upload-button" class="button button-secondary" type="button">↥ &nbsp; Analizar fotografía</button><input id="image-input" type="file" accept="image/jpeg,image/png,image/webp" hidden></div>
+<a class="expression-guide-link" href="#expression-guide" onclick="document.getElementById('expression-guide').open = true">Ver guía de expresiones <span aria-hidden="true">↓</span></a>
+<form hidden>{% csrf_token %}</form>
+<p id="status" class="status" role="status" aria-live="polite">Todo listo. Elige cómo quieres comenzar.</p>
+<div class="camera-footer"><span>◉ &nbsp; Buena luz, mejores resultados</span><span>JPG, PNG o WebP · Hasta 2 MB</span></div>
+</section>
+<section class="card result-card" aria-labelledby="result-title">
+<div class="section-heading"><h3 id="result-title">El reflejo de tu expresión</h3><span class="result-spark" aria-hidden="true">✧</span></div>
+<div id="result-visual" class="result-visual" data-emotion="waiting" data-gif-alegria="{% static 'attendance/reactions/alegria.gif' %}" data-gif-tristeza="{% static 'attendance/reactions/tristeza.gif' %}" data-gif-enojo="{% static 'attendance/reactions/enojo.gif' %}" data-gif-sorpresa="{% static 'attendance/reactions/sorpresa.gif' %}" data-gif-miedo="{% static 'attendance/reactions/miedo.gif' %}" data-gif-disgusto="{% static 'attendance/reactions/disgusto.gif' %}" data-gif-neutral="{% static 'attendance/reactions/neutral.gif' %}"><img id="reaction-gif" class="reaction-gif" alt="" hidden><span class="reaction-badge" hidden id="reaction-badge">TU REACCIÓN EN GIF</span><div class="emoji-halo"></div><span id="emotion-emoji" class="emotion-emoji" role="img" aria-label="Esperando un rostro">🙂</span></div>
+<div class="result-copy"><span class="eyebrow" id="result-label">ESPERANDO TU PRIMER GESTO</span><h2 id="emotion">Sin detección</h2><p id="emotion-description">Cada expresión tiene su propio encanto.</p><p id="summary">Las puntuaciones aparecerán al detectar un rostro.</p></div>
+<div class="scores-heading"><span>Mapa de expresiones</span><span id="face-count">0 rostros</span></div><div id="scores" class="scores"></div>
+<p class="gif-status" id="gif-status">Tu GIF aparecerá al detectar un rostro.</p>
+<p class="result-footnote">Si hay varios rostros, este panel muestra el de mayor tamaño.</p>
+</section>
+</div>
+<div class="gentle-note"><span aria-hidden="true">♡</span><p><strong>Un gesto es solo una parte de la historia.</strong> Esta herramienta estima expresiones faciales; no puede saber con certeza lo que sientes. Las puntuaciones reflejan la preferencia del modelo.</p></div>
+<details id="expression-guide" class="expression-guide" open>
+<summary>¿Cómo representar cada expresión?</summary>
+<div class="expression-guide-body">
+<p class="expression-guide-intro">Mira de frente, ilumina tu rostro desde delante y deja visibles las cejas y la boca. Prueba un gesto a la vez y mantenlo unos segundos, sin forzarlo.</p>
+<div class="expression-guide-grid">
+<article><span class="expression-guide-emoji" aria-hidden="true">😊</span><h2>Alegría</h2><p>Sonríe, eleva suavemente las mejillas y deja que los ojos se entrecierren un poco.</p><span class="expression-guide-cue">Fíjate en: mejillas elevadas y comisuras hacia arriba.</span></article>
+<article><span class="expression-guide-emoji" aria-hidden="true">😢</span><h2>Tristeza</h2><p>Levanta ligeramente la parte interior de las cejas y baja las comisuras de los labios.</p><span class="expression-guide-cue">Fíjate en: cejas inclinadas hacia el centro y boca hacia abajo.</span></article>
+<article><span class="expression-guide-emoji" aria-hidden="true">😠</span><h2>Enojo</h2><p>Junta y baja un poco las cejas. Aprieta suavemente los labios, manteniendo la mirada al frente.</p><span class="expression-guide-cue">Fíjate en: entrecejo marcado y labios tensos.</span></article>
+<article><span class="expression-guide-emoji" aria-hidden="true">😲</span><h2>Sorpresa</h2><p>Levanta las cejas, abre los ojos y deja la boca abierta formando una pequeña «O».</p><span class="expression-guide-cue">Fíjate en: cejas altas y mandíbula relajada.</span></article>
+<article><span class="expression-guide-emoji" aria-hidden="true">😨</span><h2>Miedo</h2><p>Eleva y acerca las cejas. Abre los ojos y separa un poco los labios, estirándolos ligeramente hacia los lados.</p><span class="expression-guide-cue">Fíjate en: tensión en cejas y labios, a diferencia de la sorpresa.</span></article>
+<article><span class="expression-guide-emoji" aria-hidden="true">🤢</span><h2>Disgusto</h2><p>Arruga suavemente la nariz y eleva un poco el labio superior, como ante un olor desagradable.</p><span class="expression-guide-cue">Fíjate en: nariz arrugada y labio superior elevado.</span></article>
+<article><span class="expression-guide-emoji" aria-hidden="true">😐</span><h2>Neutral</h2><p>Relaja las cejas, los párpados y la mandíbula. Deja los labios juntos suavemente, sin sonreír ni apretarlos.</p><span class="expression-guide-cue">Fíjate en: rostro en reposo y sin tensión marcada.</span></article>
+</div>
+<p class="expression-guide-note">Son ejemplos orientativos, no una única forma correcta de expresarse. Cada rostro es distinto; un gesto puede parecerse a varias categorías y el modelo puede confundirlas. No necesitas sentir la emoción para practicar la expresión.</p>
+</div>
+</details>
+</section>
+</main>
+<footer><a class="brand" href="{% url 'home' %}">{% include 'attendance/includes/logo.html' %}Emo<span>Sense</span></a><p>Hecho para explorar, con curiosidad y una sonrisa.</p><span>Visión artificial · 7 expresiones</span></footer>
+</body></html>
